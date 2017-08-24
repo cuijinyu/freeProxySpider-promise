@@ -93,4 +93,7 @@ proxyspider.prototype.write=function(){
     console.log("成功存储");
 };
 
+proxyspider.prototype.getValuableProxy=function(){
+    return this.valuableIPS;
+};
 module.exports=proxyspider;
