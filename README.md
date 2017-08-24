@@ -16,3 +16,4 @@ node index.js
 ```
 get localhost:8000/api/proxy
 ```
+[线上测试地址](http://crsc.site:8000/api/proxy)
