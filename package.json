@@ -1,0 +1,17 @@
+{
+  "name": "proxy-spider",
+  "version": "0.0.1",
+  "description": "a nodejs's proxy spider'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cuijinyu",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "co": "^4.6.0",
+    "proxy": "^0.2.4",
+    "request": "^2.81.0"
+  }
+}
