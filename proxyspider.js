@@ -12,8 +12,12 @@ var proxyspider=function(url){
     this.valuableIPS=[];
 };
 //获取网页
-proxyspider.prototype.getPage=function(){
+proxyspider.prototype.getPage=function(url){
     var that=this;
+    if(url)
+    {
+        that.url=url;
+    }
     return new Promise((resolve,reject)=>{
         request.get({
             url:that.url,
@@ -31,7 +35,6 @@ proxyspider.prototype.getPage=function(){
         })
     })
 };
-
 proxyspider.prototype.getIPS=function(body){
     var that=this;
     return new Promise((resolve,reject)=>{
@@ -52,7 +55,6 @@ proxyspider.prototype.getIPS=function(body){
         resolve();
     })
 };
-
 proxyspider.prototype.check=function(){
     var that=this;
     var flag=this.IPS.length;
@@ -95,5 +97,9 @@ proxyspider.prototype.write=function(){
 
 proxyspider.prototype.getValuableProxy=function(){
     return this.valuableIPS;
+};
+
+proxyspider.prototype.clearValuableIPS=function () {
+    this.valuableIPS=[];
 };
 module.exports=proxyspider;
