@@ -62,12 +62,12 @@ proxyspider.prototype.check=function(){
     return new Promise((resolve,reject)=>{
         for(let i=0;i<that.IPS.length;i++){
             var IP=that.IPS[i];
-            console.log(IP.ip)
+            console.log(IP)
             request({
                 url:that.url,
                 proxy:"http://" + IP.ip + ":" + IP.port,
                 method:"GET",
-                timeout:20000
+                timeout:10000
             },(error,response,body)=>{
                 if(!error) {
                     if (response.statusCode == 200) {
@@ -78,7 +78,7 @@ proxyspider.prototype.check=function(){
                         console.log(response.request['proxy']['href'], "failed!");
                     }
                 } else {
-                    //console.log("One proxy failed!");
+                    console.log("One proxy failed!");
                 }
                 flag--;
                 if (flag == 0) {
@@ -90,9 +90,12 @@ proxyspider.prototype.check=function(){
 };
 
 proxyspider.prototype.write=function(){
-    var that=this;
-    fs.writeFileSync("proxys.json",JSON.stringify(that.valuableIPS));
-    console.log("成功存储");
+    return new Promise((resolve,reject)=>{
+            var that=this;
+            fs.writeFileSync("proxys.json",JSON.stringify(that.valuableIPS));
+            console.log("成功存储");
+            resolve();
+    })
 };
 
 proxyspider.prototype.getValuableProxy=function(){
@@ -101,5 +104,6 @@ proxyspider.prototype.getValuableProxy=function(){
 
 proxyspider.prototype.clearValuableIPS=function () {
     this.valuableIPS=[];
+    console.log(`now the IPS are ${this.valuableIPS}`);
 };
 module.exports=proxyspider;

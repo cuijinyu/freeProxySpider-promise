@@ -6,53 +6,28 @@ var url="http://www.xicidaili.com/nn",
 var express = require('express');
 var app = express();
 var proxy=new proxyspider(url);
-proxy.getPage()
-    .then((data)=>{
-        proxy.getIPS(data);
-    }).then(()=>{
-    return proxy.check()
-}).then(()=>{
-    return proxy.getPage(url2)
-}).then((data)=>{
-    proxy.getIPS(data)
-}).then(()=>{
-    return proxy.check()
-}).then(()=>{
-    return proxy.getPage(url3)
-}).then((data)=>{
-    proxy.getIPS(data)
-}).then(()=>{
-    return proxy.check()
-}).then(()=>{
-    proxy.write();
-}).catch((err)=>{
-    console.log(err);
-});
+    Promise.all([url,url2,url3].map(
+        url=>proxy.getPage(url).then(
+            data=>proxy.getIPS(data)
+        )
+    )).then(values=>
+        proxy.check([].concat(...values))
+    ).then(()=>{
+            return proxy.write();
+    }).then(value=>{
+        proxy.clearValuableIPS();
+    })
 setInterval(()=>{
     proxy.clearValuableIPS();
-    proxy.getPage()
-        .then((data)=>{
-            proxy.getIPS(data);
-        }).then(()=>{
-        return proxy.check()
-    }).then(()=>{
-        return proxy.getPage(url2)
-    }).then((data)=>{
-        proxy.getIPS(data)
-    }).then(()=>{
-        return proxy.check()
-    }).then(()=>{
-        return proxy.getPage(url3)
-    }).then((data)=>{
-        proxy.getIPS(data)
-    }).then(()=>{
-        return proxy.check()
-    }).then(()=>{
-        proxy.write();
-    }).catch((err)=>{
-        console.log(err);
-    });
-    },300000);
+    Promise.all([url,url2,url3].map(
+        url=>proxy.getPage(url).then(
+            data=>proxy.getIPS(data)
+        )
+    )).then(values=>
+        proxy.check([].concat(...values))
+    ).then(()=>
+        proxy.write()
+    )},300000);
 app.get("/api/proxy",(req,res)=> {
     res.send(proxy.getValuableProxy());
 });
